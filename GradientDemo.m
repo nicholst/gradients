@@ -5,6 +5,8 @@ rho0=0.05;
 rho=0.5;
 % rhoMin=0.5; % minimum non-zero fraction of rho in a block
 rhoMin=1;
+ngrads=2;
+ThresFrac=0.1; % threshold fraction for the gradient matrix
 
 xx=linspace(1,rhoMin,V/K);
 Sig0=toeplitz(xx);
@@ -23,7 +25,7 @@ S = corrcoef(Y);
 
 % subplot(2,2,1);imagesc(Sig,[-0.1,min(1,rho*2)]);axis image;colorbar
 subplot(2,2,1);imagesc(S,[-0.1,min(1,rho*2)]);axis image;colorbar
-grmat_top = keep_top(S, 0.1);
+grmat_top = keep_top(S, ThresFrac); 
 grmat_grad = normalized_angle(grmat_top);
 subplot(2,2,2);imagesc(grmat_grad,[-0.1,min(1,rho*2)]);axis image;colorbar
 
@@ -48,10 +50,10 @@ subplot(2,2,4)
 [coeff, score, ~] = pca(grmat_grad);
 grads = score(:, 1:ngrads);
 
-plot(grads(:,1), grads(:,2), '*')
+plot(grads(:,1), grads(:,2), '.','MarkerSize',10)
 % subplot(2,2,4); plot(V(:,1),V(:,2), '*')
 % xlim
-fullscreen
+
 % plot(grmat_grad*V(:,1), grmat_grad*V(:,2), '*')
 
 
