@@ -1,0 +1,19 @@
+subplot(1,2,1)
+imagesc(grmat)
+subplot(1,2,2)
+imagesc(grmat.^3)
+
+%%
+[V, D] = eig(grmat);
+
+%%
+plot(V(1,:), V(1,:), '*')
+
+%%
+ngrads = 2;
+[coeff, score, ~] = pca(grmat);
+
+% Extract the top `ngrads` components
+grads = score(:, 1:ngrads);
+
+plot(grads(:,1), grads(:,2), '*')
