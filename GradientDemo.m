@@ -1,11 +1,13 @@
-N=40;
+N=20;
 V=300;
-K=10;
+K=5;
 rho0=0.05;
 % rho0 = 0;
 rho=0.5;
 % rhoMin=0.5; % minimum non-zero fraction of rho in a block
 rhoMin=1;
+
+Lab=repmat(1:K,[V/K,1]);Lab=Lab(:);
 
 xx=linspace(1,rhoMin,V/K);
 Sig0=toeplitz(xx);
@@ -26,6 +28,7 @@ S = corrcoef(Y);
 % subplot(2,2,1);imagesc(Sig,[-0.1,min(1,rho*2)]);axis image;colorbar
 subplot(2,3,1);imagesc(S,[-0.1,min(1,rho*2)]);axis image;colorbar
 grmat_top = keep_top(S, 0.1);
+% grmat_top(grmat_top > 0) = grmat_top(grmat_top > 0) - (3/2)*mean(grmat_top(grmat_top > 0));
 subplot(2,3,2);imagesc(grmat_top,[-0.1,min(1,rho*2)]);axis image;colorbar
 grmat_grad = normalized_angle(grmat_top);
 subplot(2,3,3);imagesc(grmat_grad,[-0.1,min(1,rho*2)]);axis image;colorbar
@@ -38,7 +41,9 @@ subplot(2,3,4);
 ngrads = 2;
 grads = score(:, 1:ngrads);
 
-plot(grads(:,1), grads(:,2), '*')
+% plot(grads(:,1), grads(:,2), '*')
+gscatter(grads(:,1), grads(:,2), Lab)
+legend off;
 title('PCA')
 % plot(V(:,1),V(:,2), '*')
 % [coeff, score, ~] = pca(S);
@@ -53,7 +58,9 @@ subplot(2,3,5)
 [coeff, score, ~] = pca(grmat_top);
 grads = score(:, 1:ngrads);
 
-plot(grads(:,1), grads(:,2), '*')
+% plot(grads(:,1), grads(:,2), '*')
+gscatter(grads(:,1), grads(:,2), Lab)
+legend off;
 title('Just thresholding')
 
 subplot(2,3,6)
@@ -63,7 +70,9 @@ subplot(2,3,6)
 [coeff, score, ~] = pca(grmat_grad);
 grads = score(:, 1:ngrads);
 
-plot(grads(:,1), grads(:,2), '*')
+% plot(grads(:,1), grads(:,2), '*')
+gscatter(grads(:,1), grads(:,2), Lab)
+legend off;
 title('Gradients')
 % subplot(2,2,4); plot(V(:,1),V(:,2), '*')
 % xlim
@@ -77,8 +86,8 @@ grads = score(:, 1:ngrads);
 plot(grads(:,1), grads(:,2), '*')
 
 %%
-N=100;
-V=300;
+N=20;
+V=500;
 K=10;
 rho0=0.05;
 % rho0 = 0;
@@ -86,15 +95,20 @@ rho=0.5;
 % rhoMin=0.5; % minimum non-zero fraction of rho in a block
 rhoMin=1;
 
+Lab=repmat(1:K,[V/K,1]);Lab=Lab(:);
+
 xx=linspace(1,rhoMin,V/K);
 Sig0=toeplitz(xx);
 Sig=rho0+(1-rho)*eye(V)+rho*kron(eye(K),Sig0);
 
+Y = mvnrnd(repmat(0,[1,V]),Sig,N);
 
 addnoise = 1;
 if addnoise == 1
     Y = Y + randn(size(Y))*0.75;
 end
+
+% Y = randn(N,V)
 
 S = corrcoef(Y);
 [V,D]=eig(S);V=fliplr(V);D=flip(diag(D));
@@ -102,6 +116,7 @@ S = corrcoef(Y);
 % subplot(2,2,1);imagesc(Sig,[-0.1,min(1,rho*2)]);axis image;colorbar
 subplot(2,3,1);imagesc(S,[-0.1,min(1,rho*2)]);axis image;colorbar
 grmat_top = keep_top(S, 0.1);
+% grmat_top(grmat_top > 0) = grmat_top(grmat_top > 0) - (3/2)*mean(grmat_top(grmat_top > 0));
 subplot(2,3,2);imagesc(grmat_top,[-0.1,min(1,rho*2)]);axis image;colorbar
 grmat_grad = normalized_angle(grmat_top);
 subplot(2,3,3);imagesc(grmat_grad,[-0.1,min(1,rho*2)]);axis image;colorbar
@@ -111,10 +126,12 @@ subplot(2,3,3);imagesc(grmat_grad,[-0.1,min(1,rho*2)]);axis image;colorbar
 [V,D]=eig(S); V=fliplr(V);
 subplot(2,3,4);
 [coeff, score, ~] = pca(S);
-ngrads = 2;
+ngrads = 3;
 grads = score(:, 1:ngrads);
 
-plot(grads(:,1), grads(:,2), '*')
+% plot(grads(:,1), grads(:,2), '*')
+scatter3(grads(:,1), grads(:,2), grads(:,3), 36, Lab, 'filled'); 
+legend off;
 title('PCA')
 % plot(V(:,1),V(:,2), '*')
 % [coeff, score, ~] = pca(S);
@@ -129,7 +146,9 @@ subplot(2,3,5)
 [coeff, score, ~] = pca(grmat_top);
 grads = score(:, 1:ngrads);
 
-plot(grads(:,1), grads(:,2), '*')
+% plot(grads(:,1), grads(:,2), '*')
+scatter3(grads(:,1), grads(:,2), grads(:,3), 36, Lab, 'filled'); 
+legend off;
 title('Just thresholding')
 
 subplot(2,3,6)
@@ -139,7 +158,9 @@ subplot(2,3,6)
 [coeff, score, ~] = pca(grmat_grad);
 grads = score(:, 1:ngrads);
 
-plot(grads(:,1), grads(:,2), '*')
+% plot(grads(:,1), grads(:,2), '*')
+scatter3(grads(:,1), grads(:,2), grads(:,3), 36, Lab, 'filled'); 
+legend off;
 title('Gradients')
 % subplot(2,2,4); plot(V(:,1),V(:,2), '*')
 % xlim
