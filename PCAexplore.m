@@ -1,8 +1,8 @@
-N=20;
-K=8;
+N=50;
+K=3;
 V=K*30;
-rho0=0.05;
-rho=0.5;
+rho0=0.01;
+rho=0.3;
 % rhoMin=0.5; % minimum non-zero fraction of rho in a block
 rhoMin=1;
 ngrads=2;
@@ -30,19 +30,22 @@ else
 end
 
 S = corrcoef(Y);
+% %  Add FastICA_25 - https://research.ics.aalto.fi/ica/fastica/code/dlcode.shtml
+% Si = fastica(Y.^6, 'numOfIC', 2)';
+
 
 [V,D]=eig(S);V=fliplr(V);D=flip(diag(D));
 
 %subplot(2,2,1);imagesc(Sig,[-0.1,min(1,rho*2)]);axis image;colorbar
-subplot(2,2,1);imagesc(S,[-0.1,min(1,rho*2)]);axis image;colorbar
+subplot(2,3,1);imagesc(S,[-0.1,min(1,rho*2)]);axis image;colorbar
 grmat_top = keep_top(S, ThresFrac); 
 grmat_grad = normalized_angle(grmat_top);
-subplot(2,2,2);imagesc(grmat_grad,[-0.1,min(1,rho*2)]);axis image;colorbar
+subplot(2,3,2);imagesc(grmat_grad,[-0.1,min(1,rho*2)]);axis image;colorbar
 
 % subplot(2,2,3);plot(V(:,1:3));set(get(gca,'Children'),'LineWidth',2)
 % legend({'PC1','PC2','PC3'})
 [V,D]=eig(S); V=fliplr(V);
-subplot(2,2,3);
+subplot(2,3,4);
 %[coeff, score, ~] = pca(S); % Sample covariance
 [coeff, score, ~] = pca(grmat_top); % Thresholded covariance
 % [coeff, score, ~] = pca(Sig); % True covariance
@@ -57,7 +60,7 @@ gscatter(grads(:,1), grads(:,2), Lab)
 % 
 % plot(grads(:,1), grads(:,2), '*')
 
-subplot(2,2,4)
+subplot(2,3,5)
 
 % grmat_grad = S;
 % [V, D] = eig(grmat_grad); V=fliplr(V);
@@ -71,4 +74,8 @@ gscatter(grads(:,1), grads(:,2), Lab)
 
 % plot(grmat_grad*V(:,1), grmat_grad*V(:,2), '*')
 
-mean(S(:)<0)
+%mean(S(:)<0)
+
+% subplot(2,3,6)
+
+% gscatter(Si(:,1), Si(:,2), Lab)
