@@ -1,0 +1,21 @@
+Features to add...
+  - Base atlas only on a*100% of closest subjects 
+  - Allow switching between different methods (instead doing all
+  - Iterative update of atlas
+
+
+NEW IDEA to impliment
+  - Do full affine registration to get *sharpest* possible atlas
+     - Maybe here it is key to use only closest subjects to avoid
+       insane xforms
+     - Then figure out how to back off perspective
+     - Or simply define this new atlas and then register with rot+scale and back-off scale
+
+
+3D - Homog. xform has
+ - 3 shift
+ - 3x3 rot w/ 3 rot, 3 scal
+ - 3 perspective
+
+"12 parameter affine" - parallel lines stay parallel, shift, rot, scale
+"15 parameter affine" - strait lines stay strait
