@@ -34,13 +34,13 @@ subplot(1,3,2)
 ngrads = 2;
 % [coeff, score, ~] = pca(apower(grmat, 2.3));
 % [coeff, score, ~] = pca(grmat_grad);
-[coeff, score, ~] = pca(grmat_grad_sim);
+[coeff, score, ~] = pca(grmat_top);
 
 % Extract the top `ngrads` components
 grads = score(:, 1:ngrads);
 
 plot(grads(:,1), grads(:,2), '*')
-title('Gradients - no thresholding')
+title('Gradients - just thresholding')
 
 subplot(1,3,3)
 [coeff, score, ~] = pca(grmat_grad);
